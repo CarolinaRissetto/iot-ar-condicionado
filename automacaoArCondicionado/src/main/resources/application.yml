@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    platform: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/banco-automacao
+    username: automacao
+    password: automacao
+    driver-class: com.mysql.cj.jdbc.Driver

@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_USER: automacao
+      MYSQL_PASSWORD: automacao
+      MYSQL_DATABASE: banco-automacao
+      MYSQL_ROOT_PASSWORD: 'automacao'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/mysql
+volumes:
+  mysql:
+    driver: local
+
