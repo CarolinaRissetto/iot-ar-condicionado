@@ -16,11 +16,24 @@ class AgendamentoService(
 ) {
 
     fun agendarAgendamento(request: AgendamentoRequest) {
-        val agendamento = AgendamentoEntity().apply {
-            horaLigamento = request.horaLigamento
-            horaDesligamento = request.horaDesligamento
+
+        val agendamentoExistente = arCondicionadoRepository.findAll().firstOrNull()
+
+        if (agendamentoExistente != null) {
+            agendamentoExistente.horaLigamento = request.horaLigamento
+            agendamentoExistente.horaDesligamento = request.horaDesligamento
+
+            arCondicionadoRepository.save(agendamentoExistente)
+
+        } else {
+
+            val agendamento = AgendamentoEntity().apply {
+                horaLigamento = request.horaLigamento
+                horaDesligamento = request.horaDesligamento
+            }
+
+            arCondicionadoRepository.save(agendamento)
         }
-        arCondicionadoRepository.save(agendamento)
     }
 
     @Scheduled(cron = "0 * * * * *")

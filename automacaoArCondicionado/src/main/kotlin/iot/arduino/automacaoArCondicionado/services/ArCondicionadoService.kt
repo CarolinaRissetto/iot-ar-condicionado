@@ -7,7 +7,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 abstract class ArCondicionadoService {
 
-    val BASE_URL = "http://000.000.0.000:8080"
+    val BASE_URL = "http://192.168.0.115:8080"
     val MEDIA_TYPE = "text/plain".toMediaType()
     val BODY = "".toRequestBody(MEDIA_TYPE)
 
