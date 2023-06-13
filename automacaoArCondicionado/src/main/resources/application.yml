@@ -2,10 +2,20 @@ spring:
   jpa:
     platform: MYSQL
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+      dialect: org.hibernate.dialect.MySQLDialect
+
   datasource:
-    url: jdbc:mysql://localhost:3306/banco-automacao
+    url: jdbc:mysql://db-carol-iot.mysql.database.azure.com/automacao
     username: automacao
-    password: automacao
+    password: "@CarolAr"
     driver-class: com.mysql.cj.jdbc.Driver
+api:
+  usuario-padrao: "carolina.rissetto"
+  senha-padrao: 123456
+  ip-padrao: 45.166.182.224:8080
+jwt:
+  expiration: 86400000
+  secret: A+X;fTJP&Pd,TD9dwVq(hsHX,ya^<wsD_UK7L+@=S;{'CydP]{v@}G'b>et;yz$*\yL5S8EJN:%P:X%H9>#nYLrX}@\s?CQcpspH,2emzBc!Q[V'AYa~uzF8WR~AUrMzxp/V$9([S9X#zj/CH('#]B_Hc+%fGhe27YB;^j4\Xk=Ju"Ap~_&<L;=!Z;!,2UP;!hF3P]j85#*`&T]/kB/W^6$v~u6qpejL>kY^f)sy4:qTq_Ec!-z!@aAp~sLKGU>$

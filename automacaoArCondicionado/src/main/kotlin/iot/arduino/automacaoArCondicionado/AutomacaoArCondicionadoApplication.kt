@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class AutomacaoArCondicionadoApplication
 
 fun main(args: Array<String>) {
-	runApplication<AutomacaoArCondicionadoApplication>(*args)
+    runApplication<AutomacaoArCondicionadoApplication>(*args)
 }

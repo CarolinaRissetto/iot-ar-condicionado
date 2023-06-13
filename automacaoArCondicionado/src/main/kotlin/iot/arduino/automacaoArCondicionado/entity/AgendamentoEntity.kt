@@ -1,7 +1,6 @@
 package iot.arduino.automacaoArCondicionado.entity
 
 import jakarta.persistence.*
-import lombok.Getter
 import lombok.Setter
 import java.time.LocalTime
 
@@ -14,6 +13,10 @@ class AgendamentoEntity {
     @Setter
     @Column(nullable = false)
     var horaLigamento: LocalTime? = null
+
+    @Setter
+    @Column(nullable = false)
+    var usuario: String? = null
 
     @Setter
     @Column(nullable = false)

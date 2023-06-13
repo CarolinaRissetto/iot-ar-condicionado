@@ -4,22 +4,51 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.springframework.http.HttpStatus
+import java.net.NoRouteToHostException
+import java.net.SocketException
+import java.net.SocketTimeoutException
 
-abstract class ArCondicionadoService {
+class AppException(
+    val status: HttpStatus,
+    message: String
+) : RuntimeException(message)
 
-    val BASE_URL = "http://192.168.0.115:8080"
-    val MEDIA_TYPE = "text/plain".toMediaType()
-    val BODY = "".toRequestBody(MEDIA_TYPE)
+abstract class ArCondicionadoService(
+    protected val authenticationService: AuthenticationService,
+    protected val httpClient: OkHttpClient
+) {
 
-    fun montarRequest(param: String): Pair<Request, OkHttpClient> {
-        val url = BASE_URL + param
+    private val MEDIA_TYPE = "text/plain".toMediaType()
+    private val BODY = "".toRequestBody(MEDIA_TYPE)
 
-        val client = OkHttpClient()
+    fun montarRequest(param: String, ip: String): Pair<Request, OkHttpClient> {
+        var ip = ip
+        if (!ip.startsWith("http")) {
+            ip = "http://$ip"
+        }
+        val url = ip + param
+
         val request = Request.Builder()
             .url(url)
             .post(BODY)
             .build()
 
-        return Pair(request, client)
+        return Pair(request, httpClient)
+    }
+
+    fun tratarErro(exception: SocketException) {
+        when (exception) {
+            is NoRouteToHostException -> throw AppException(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "Dispositivo IOT indisponivel"
+            )
+
+            is SocketTimeoutException -> throw AppException(
+                HttpStatus.TOO_MANY_REQUESTS,
+                "Dispositivo lento ou com excesso de requisições"
+            )
+        }
+
     }
 }

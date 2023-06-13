@@ -11,10 +11,16 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(String username, String password) async {
+  Future<bool> login(String username, String password) async {
     final token = await LoginService().login(username, password);
     if (token != null) {
       setToken(token);
     }
+
+    return token != null;
+  }
+
+  Future<bool> register(String username, String password, String ip) async {
+    return await LoginService().register(username, password, ip);
   }
 }
