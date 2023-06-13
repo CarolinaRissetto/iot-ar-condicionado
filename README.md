@@ -3,6 +3,7 @@ Um aplicativo para controle remoto de ar condicionado que se conecta a uma estru
 
 ![login](https://github.com/Arduino-IRremote/Arduino-IRremote/assets/65413041/e74f4697-2e96-47b6-8d85-2d637b7aa9b5)
 ![cadastro](https://github.com/Arduino-IRremote/Arduino-IRremote/assets/65413041/067f89c7-7dbd-4ca8-86e5-4b433387cf27)
+![cadastro erro](https://github.com/Arduino-IRremote/Arduino-IRremote/assets/65413041/46dc5542-4438-4d20-91fd-476fc05ae3b8)
 ![controle](https://github.com/Arduino-IRremote/Arduino-IRremote/assets/65413041/e047b142-0e9e-4eb0-842b-6f718445549f)
 ![agendamento](https://github.com/Arduino-IRremote/Arduino-IRremote/assets/65413041/17531d9e-06fa-4849-8c45-85d170e3523e)
 
