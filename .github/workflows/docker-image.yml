@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file ./automacaoArCondicionado/Dockerfile --tag automacao-ar:$(date +%s)
+      run: docker build ./automacaoArCondicionado --file Dockerfile --tag automacao-ar:$(date +%s)
