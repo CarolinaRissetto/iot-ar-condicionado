@@ -71,8 +71,6 @@ int temperaturaAr(String command) {
 
   int temperatura = command.toInt();
 
-    Serial.println("temper");
-
 
   if (temperatura == 18) {
 

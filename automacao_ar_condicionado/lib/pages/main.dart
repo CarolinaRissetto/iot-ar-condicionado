@@ -19,8 +19,6 @@ class _MyHomePageState extends State<MyHomePage> {
   ArConcidionadoService? _service;
   bool _isOn = false;
   int _temperature = 20;
-  String? _scheduledTime;
-  String? _scheduleTurnOffTime;
   Future<ObterAgendamentoRequest?> obtendoAgendamento = Future.value(null);
 
   @override
@@ -100,6 +98,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  String formatTime(TimeOfDay timeOfDay) {
+    return '${timeOfDay.hour}:${timeOfDay.minute}';
+  }
+
   Future<void> _setScheduledTime() async {
     var selected = await getScheduleTime('Horário para ligar o aparelho.');
 
@@ -110,12 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (!validateTime(selectedTurnOff)) return;
 
-    setState(() {
-      _scheduledTime = selected!.format(context);
-      _scheduleTurnOffTime = selectedTurnOff!.format(context);
-    });
-
-    await _service!.agendar(_scheduledTime!, _scheduleTurnOffTime!);
+    await _service!
+        .agendar(formatTime(selected!), formatTime(selectedTurnOff!));
 
     setState(() {
       obtendoAgendamento = _service!.obterAgendamento();
