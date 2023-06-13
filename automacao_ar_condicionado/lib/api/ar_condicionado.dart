@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:automacao_ar_condicionado/api/config.dart';
 import 'package:http/http.dart';
@@ -34,7 +35,10 @@ class AgendamentoRequest {
 }
 
 class ArConcidionadoService {
+  final String token;
   final url = '${ApiConfig.server}/ar-condicionado';
+
+  ArConcidionadoService(this.token);
 
   Future<bool> ligar() async {
     return _operacao(ArCondicionadoRequest(operacao: Operacao.ligar));
@@ -51,6 +55,10 @@ class ArConcidionadoService {
 
   Future<bool> agendar(String horaLigamento, String horaDesligamento) async {
     final response = await post(Uri.parse('$url/agendamento'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: AgendamentoRequest(
                 horaLigamento: horaLigamento,
                 horaDesligamento: horaDesligamento)
@@ -60,8 +68,12 @@ class ArConcidionadoService {
   }
 
   Future<bool> _operacao(ArCondicionadoRequest request) async {
-    final response =
-        await post(Uri.parse('$url/operacao'), body: request.toJson());
+    final response = await post(Uri.parse('$url/operacao'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: request.toJson());
 
     return response.statusCode == 200;
   }

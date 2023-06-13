@@ -21,9 +21,10 @@ class MyApp extends StatelessWidget {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            colorScheme:
-                ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple),
+            scaffoldBackgroundColor: Colors.white,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
             useMaterial3: true,
           ),
           initialRoute: RouteConfig.initial,

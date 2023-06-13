@@ -8,7 +8,6 @@ import iot.arduino.automacaoArCondicionado.services.DesligarArCondicionadoServic
 import iot.arduino.automacaoArCondicionado.services.LigarArCondicionadoService
 import iot.arduino.automacaoArCondicionado.services.TemperaturaArCondicionadoService
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 

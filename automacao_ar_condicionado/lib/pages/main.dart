@@ -1,4 +1,9 @@
+import 'dart:developer';
+
+import 'package:automacao_ar_condicionado/api/ar_condicionado.dart';
+import 'package:automacao_ar_condicionado/context/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title});
@@ -10,31 +15,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  ArConcidionadoService? _service;
   bool _isOn = false;
   int _temperature = 20;
   String? _scheduledTime;
   String? _scheduleTurnOffTime;
 
-  void _togglePower() {
+  @override
+  void initState() {
+    _service =
+        ArConcidionadoService(Provider.of<Auth>(context, listen: false).token!);
+    super.initState();
+  }
+
+  void _togglePower() async {
+    _isOn ? await _service!.desligar() : await _service!.ligar();
+
     setState(() {
       _isOn = !_isOn;
     });
   }
 
-  void _incrementTemperature() {
+  void _incrementTemperature() async {
     if (_temperature >= 21) return;
 
     setState(() {
       _temperature++;
     });
+
+    await _service!.alterarTemperatura(_temperature);
   }
 
-  void _decrementTemperature() {
+  void _decrementTemperature() async {
     if (_temperature <= 18) return;
 
     setState(() {
       _temperature--;
     });
+
+    await _service!.alterarTemperatura(_temperature);
   }
 
   void showMessage(String text, {Color? color = Colors.red}) {
@@ -82,14 +101,17 @@ class _MyHomePageState extends State<MyHomePage> {
       _scheduledTime = selected!.format(context);
       _scheduleTurnOffTime = selectedTurnOff!.format(context);
     });
+
+    await _service!.agendar(_scheduledTime!, _scheduleTurnOffTime!);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.purple.withOpacity(0.5),
         title: Text(widget.title),
+        automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
@@ -114,6 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     FloatingActionButton(
+                      heroTag: "ligar",
                       onPressed: _togglePower,
                       tooltip: _isOn ? 'Desligar' : 'Ligar',
                       child: Icon(_isOn
@@ -125,12 +148,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FloatingActionButton(
+                          heroTag: "Diminuir",
                           onPressed: _decrementTemperature,
                           tooltip: 'Diminuir temperatura',
                           child: const Icon(Icons.remove),
                         ),
                         const SizedBox(width: 16),
                         FloatingActionButton(
+                          heroTag: "Aumentar",
                           onPressed: _incrementTemperature,
                           tooltip: 'Aumentar temperatura',
                           child: const Icon(Icons.add),

@@ -4,24 +4,18 @@ import 'package:automacao_ar_condicionado/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _ipController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var loading = false;
-
-  @override
-  void initState() {
-    loading = false;
-    super.initState();
-  }
 
   String? _validator(String? value) {
     return value == null || value.isEmpty ? 'Campo obrigatório' : null;
@@ -33,23 +27,17 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    setState(() {
-      loading = true;
-    });
-
     _formKey.currentState!.save();
 
-    final success = await Provider.of<Auth>(context, listen: false).login(
-      _usernameController.text,
-      _passwordController.text,
-    );
+    final success = await Provider.of<Auth>(context, listen: false).register(
+        _usernameController.text, _passwordController.text, _ipController.text);
 
     Navigator.of(context).pushReplacementNamed(
-        success ? RouteNames.homePage : RouteNames.loginPage);
+        success ? RouteNames.loginPage : RouteNames.registerPage);
   }
 
-  void _onClickRegister() {
-    Navigator.of(context).pushNamed(RouteNames.registerPage);
+  void _onClickLogin() {
+    Navigator.of(context).pushNamed(RouteNames.loginPage);
   }
 
   @override
@@ -65,27 +53,33 @@ class _LoginPageState extends State<LoginPage> {
                 TextFormField(
                   decoration:
                       const InputDecoration(label: Text('Nome de usuario')),
-                  maxLength: 40,
                   controller: _usernameController,
+                  maxLength: 40,
                   validator: _validator,
                 ),
                 TextFormField(
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: const InputDecoration(label: Text('senha')),
-                  maxLength: 10,
+                  decoration: const InputDecoration(label: Text('Senha')),
                   controller: _passwordController,
+                  maxLength: 10,
+                  validator: _validator,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(label: Text('IP Público')),
+                  controller: _ipController,
+                  maxLength: 40,
                   validator: _validator,
                 ),
                 ElevatedButton.icon(
-                    onPressed: loading ? null : _submit,
-                    icon: const Icon(Icons.login),
-                    label: const Text('Entrar')),
-                OutlinedButton.icon(
-                    onPressed: loading ? null : _onClickRegister,
+                    onPressed: _submit,
                     icon: const Icon(Icons.how_to_reg),
-                    label: const Text('Criar conta'))
+                    label: const Text('Criar conta')),
+                OutlinedButton.icon(
+                    onPressed: _onClickLogin,
+                    icon: const Icon(Icons.login),
+                    label: const Text('Já tenho conta')),
               ],
             )),
       ),
@@ -96,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _ipController.dispose();
     super.dispose();
   }
 }
