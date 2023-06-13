@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:automacao_ar_condicionado/api/config.dart';
 import 'package:http/http.dart';
@@ -34,6 +33,21 @@ class AgendamentoRequest {
   }
 }
 
+class ObterAgendamentoRequest {
+  final String horaLigamento;
+  final String horaDesligamento;
+
+  ObterAgendamentoRequest(
+      {required this.horaLigamento, required this.horaDesligamento});
+
+  factory ObterAgendamentoRequest.fromJson(Map<String, dynamic> json) {
+    return ObterAgendamentoRequest(
+      horaLigamento: json['horaLigamento'],
+      horaDesligamento: json['horaDesligamento'],
+    );
+  }
+}
+
 class ArConcidionadoService {
   final String token;
   final url = '${ApiConfig.server}/ar-condicionado';
@@ -65,6 +79,28 @@ class ArConcidionadoService {
             .toJson());
 
     return response.statusCode == 200;
+  }
+
+  Future<bool> deletarAgendamento() async {
+    final response = await delete(Uri.parse('$url/agendamento'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    });
+
+    return response.statusCode == 200;
+  }
+
+  Future<ObterAgendamentoRequest?> obterAgendamento() async {
+    final response = await get(Uri.parse('$url/agendamento'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    });
+
+    if (response.statusCode == 200 && response.body.isNotEmpty) {
+      return ObterAgendamentoRequest.fromJson(jsonDecode(response.body));
+    }
+
+    return null;
   }
 
   Future<bool> _operacao(ArCondicionadoRequest request) async {

@@ -43,47 +43,58 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Center(
+      body: Center(
         child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration:
-                      const InputDecoration(label: Text('Nome de usuario')),
-                  controller: _usernameController,
-                  maxLength: 40,
-                  validator: _validator,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: const InputDecoration(label: Text('Senha')),
-                  controller: _passwordController,
-                  maxLength: 10,
-                  validator: _validator,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(label: Text('IP Público')),
-                  controller: _ipController,
-                  maxLength: 40,
-                  validator: _validator,
-                ),
-                ElevatedButton.icon(
-                    onPressed: _submit,
-                    icon: const Icon(Icons.how_to_reg),
-                    label: const Text('Criar conta')),
-                OutlinedButton.icon(
-                    onPressed: _onClickLogin,
-                    icon: const Icon(Icons.login),
-                    label: const Text('Já tenho conta')),
-              ],
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration:
+                        const InputDecoration(label: Text('Nome de usuario')),
+                    controller: _usernameController,
+                    maxLength: 40,
+                    validator: _validator,
+                  ),
+                  TextFormField(
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: const InputDecoration(label: Text('Senha')),
+                    controller: _passwordController,
+                    maxLength: 10,
+                    validator: _validator,
+                  ),
+                  TextFormField(
+                    decoration:
+                        const InputDecoration(label: Text('IP Público')),
+                    controller: _ipController,
+                    maxLength: 40,
+                    validator: _validator,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                          onPressed: _submit,
+                          icon: const Icon(Icons.how_to_reg),
+                          label: const Text('Criar conta')),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      OutlinedButton.icon(
+                          onPressed: _onClickLogin,
+                          icon: const Icon(Icons.login),
+                          label: const Text('Já tenho conta')),
+                    ],
+                  ),
+                ],
+              ),
             )),
       ),
-    ));
+    );
   }
 
   @override

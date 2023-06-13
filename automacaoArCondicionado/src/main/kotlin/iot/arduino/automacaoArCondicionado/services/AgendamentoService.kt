@@ -39,6 +39,21 @@ class AgendamentoService(
         }
     }
 
+    fun deletarAgendamento() {
+        var user = authenticationService.getCurrentUser()
+        val agendamentoExistente = arCondicionadoRepository.findByUsuario(user.username)
+
+        if (agendamentoExistente != null) {
+
+            arCondicionadoRepository.delete(agendamentoExistente)
+        }
+    }
+
+    fun obterAgendamento(): AgendamentoEntity? {
+        var user = authenticationService.getCurrentUser()
+        return arCondicionadoRepository.findByUsuario(user.username)
+    }
+
     @Scheduled(cron = "0 * * * * *")
     fun verificarAgendamento() {
         val now = LocalTime.now().truncatedTo(ChronoUnit.MINUTES)

@@ -1,4 +1,3 @@
-import 'package:automacao_ar_condicionado/api/login.dart';
 import 'package:automacao_ar_condicionado/context/auth.dart';
 import 'package:automacao_ar_condicionado/router/routes.dart';
 import 'package:flutter/material.dart';
@@ -55,41 +54,53 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Center(
+      body: Center(
         child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration:
-                      const InputDecoration(label: Text('Nome de usuario')),
-                  maxLength: 40,
-                  controller: _usernameController,
-                  validator: _validator,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: const InputDecoration(label: Text('senha')),
-                  maxLength: 10,
-                  controller: _passwordController,
-                  validator: _validator,
-                ),
-                ElevatedButton.icon(
-                    onPressed: loading ? null : _submit,
-                    icon: const Icon(Icons.login),
-                    label: const Text('Entrar')),
-                OutlinedButton.icon(
-                    onPressed: loading ? null : _onClickRegister,
-                    icon: const Icon(Icons.how_to_reg),
-                    label: const Text('Criar conta'))
-              ],
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration:
+                        const InputDecoration(label: Text('Nome de usuario')),
+                    maxLength: 40,
+                    controller: _usernameController,
+                    validator: _validator,
+                  ),
+                  TextFormField(
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: const InputDecoration(label: Text('senha')),
+                    maxLength: 10,
+                    controller: _passwordController,
+                    validator: _validator,
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                            onPressed: loading ? null : _submit,
+                            icon: const Icon(Icons.login),
+                            label: const Text('Entrar')),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        OutlinedButton.icon(
+                            onPressed: loading ? null : _onClickRegister,
+                            icon: const Icon(Icons.how_to_reg),
+                            label: const Text('Criar conta'))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             )),
       ),
-    ));
+    );
   }
 
   @override

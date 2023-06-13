@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:automacao_ar_condicionado/api/ar_condicionado.dart';
+import 'package:automacao_ar_condicionado/context/agendamento.dart';
 import 'package:automacao_ar_condicionado/context/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,11 +21,15 @@ class _MyHomePageState extends State<MyHomePage> {
   int _temperature = 20;
   String? _scheduledTime;
   String? _scheduleTurnOffTime;
+  Future<ObterAgendamentoRequest?> obtendoAgendamento = Future.value(null);
 
   @override
   void initState() {
-    _service =
+    final service =
         ArConcidionadoService(Provider.of<Auth>(context, listen: false).token!);
+    _service = service;
+
+    obtendoAgendamento = service.obterAgendamento();
     super.initState();
   }
 
@@ -87,6 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return true;
   }
 
+  Future _onDelete() async {
+    await _service!.deletarAgendamento();
+
+    setState(() {
+      obtendoAgendamento = _service!.obterAgendamento();
+    });
+  }
+
   Future<void> _setScheduledTime() async {
     var selected = await getScheduleTime('Horário para ligar o aparelho.');
 
@@ -103,6 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     await _service!.agendar(_scheduledTime!, _scheduleTurnOffTime!);
+
+    setState(() {
+      obtendoAgendamento = _service!.obterAgendamento();
+    });
   }
 
   @override
@@ -121,75 +138,88 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Temperatura: $_temperature°C',
-              style: Theme.of(context).textTheme.headlineMedium,
+            const Spacer(
+              flex: 1,
             ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: "ligar",
-                      onPressed: _togglePower,
-                      tooltip: _isOn ? 'Desligar' : 'Ligar',
-                      child: Icon(_isOn
-                          ? Icons.power_settings_new
-                          : Icons.power_settings_new_outlined),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FloatingActionButton(
-                          heroTag: "Diminuir",
-                          onPressed: _decrementTemperature,
-                          tooltip: 'Diminuir temperatura',
-                          child: const Icon(Icons.remove),
-                        ),
-                        const SizedBox(width: 16),
-                        FloatingActionButton(
-                          heroTag: "Aumentar",
-                          onPressed: _incrementTemperature,
-                          tooltip: 'Aumentar temperatura',
-                          child: const Icon(Icons.add),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        _scheduledTime == null
-                            ? const Text(
-                                'Sem agendamentos.',
-                              )
-                            : Column(
-                                children: [
-                                  Text('Ligar ás $_scheduledTime horas'),
-                                  Text(
-                                      'Desligar ás $_scheduleTurnOffTime horas')
-                                ],
-                              ),
-                        Container(
-                          child: _scheduledTime == null
-                              ? null
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _scheduledTime = null;
-                                    });
-                                  },
-                                  icon: const Icon(Icons.delete)),
-                        )
-                      ],
-                    ),
-                  ],
+            Column(children: [
+              Text(
+                'Temperatura: $_temperature°C',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      FloatingActionButton(
+                        heroTag: "ligar",
+                        onPressed: _togglePower,
+                        tooltip: _isOn ? 'Desligar' : 'Ligar',
+                        child: Icon(_isOn
+                            ? Icons.power_settings_new
+                            : Icons.power_settings_new_outlined),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FloatingActionButton(
+                            heroTag: "Diminuir",
+                            onPressed: _decrementTemperature,
+                            tooltip: 'Diminuir temperatura',
+                            child: const Icon(Icons.remove),
+                          ),
+                          const SizedBox(width: 16),
+                          FloatingActionButton(
+                            heroTag: "Aumentar",
+                            onPressed: _incrementTemperature,
+                            tooltip: 'Aumentar temperatura',
+                            child: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            const Spacer(
+              flex: 1,
+            ),
+            Expanded(
+              flex: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: FutureBuilder(
+                  future: obtendoAgendamento,
+                  builder: (ctx, estadoAtual) => Row(
+                    children: [
+                      !estadoAtual.hasData
+                          ? const Text(
+                              'Sem agendamentos.',
+                            )
+                          : Column(
+                              children: [
+                                Text(
+                                    'Ligar ás ${estadoAtual.data!.horaLigamento} horas'),
+                                Text(
+                                    'Desligar ás ${estadoAtual.data!.horaDesligamento} horas')
+                              ],
+                            ),
+                      Container(
+                        child: !estadoAtual.hasData
+                            ? null
+                            : IconButton(
+                                onPressed: _onDelete,
+                                icon: const Icon(Icons.delete)),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

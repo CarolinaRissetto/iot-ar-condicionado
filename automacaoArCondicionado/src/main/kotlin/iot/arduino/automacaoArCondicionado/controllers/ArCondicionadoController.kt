@@ -1,5 +1,6 @@
 package iot.arduino.automacaoArCondicionado.controllers
 
+import iot.arduino.automacaoArCondicionado.entity.AgendamentoEntity
 import iot.arduino.automacaoArCondicionado.enum.Operacao.*
 import iot.arduino.automacaoArCondicionado.request.AgendamentoRequest
 import iot.arduino.automacaoArCondicionado.request.ArCondicionadoRequest
@@ -34,5 +35,17 @@ class ArCondicionadoController(
     @ResponseStatus(HttpStatus.OK)
     fun criarAgendamento(@RequestBody request: AgendamentoRequest) {
         agendamentoService.agendarAgendamento(request)
+    }
+
+    @DeleteMapping("/agendamento")
+    @ResponseStatus(HttpStatus.OK)
+    fun deletarAgendamento() {
+        agendamentoService.deletarAgendamento()
+    }
+
+    @GetMapping("/agendamento")
+    @ResponseStatus(HttpStatus.OK)
+    fun obterAgendamento(): AgendamentoEntity? {
+       return agendamentoService.obterAgendamento()
     }
 }

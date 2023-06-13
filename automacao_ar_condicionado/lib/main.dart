@@ -1,3 +1,4 @@
+import 'package:automacao_ar_condicionado/context/agendamento.dart';
 import 'package:automacao_ar_condicionado/context/auth.dart';
 import 'package:automacao_ar_condicionado/router/routes.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Auth(),
         ),
+        ChangeNotifierProxyProvider<Auth, Agendamento>(
+          create: (ctx) => Agendamento(""),
+          update: (ctx, auth, agendamento) => Agendamento(auth.token ?? ""),
+        )
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
