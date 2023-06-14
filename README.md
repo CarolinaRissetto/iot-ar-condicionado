@@ -11,8 +11,7 @@ Um aplicativo para controle remoto de ar condicionado que se conecta a uma estru
 
 ### Link para o video mostrando o funcionamento:
 
-[![video](https://github.com/CarolinaRissetto/iot-ar-condicionado/assets/65413041/f0550111-353e-4130-8057-41008c202060)](https://www.youtube.com/watch?v=Lycgs02nx9E "Apresentação")
-
+[![video](https://github-production-user-asset-6210df.s3.amazonaws.com/65413041/245640303-5f2ce00b-11e0-4101-9ecc-ce7a68d77718.png)](https://www.youtube.com/watch?v=Lycgs02nx9E "Apresentação")
 
 # Instalação
 
