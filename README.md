@@ -10,8 +10,7 @@ Um aplicativo para controle remoto de ar condicionado que se conecta a uma estru
 ![agendamento](https://github.com/Arduino-IRremote/Arduino-IRremote/assets/65413041/17531d9e-06fa-4849-8c45-85d170e3523e)
 
 ### Link para o video mostrando o funcionamento:
-
-![video(https://github.com/CarolinaRissetto/iot-ar-condicionado/assets/65413041/cb88c4ba-f6f5-49bf-8b75-0cc4fcbdc9a4)](https://www.youtube.com/watch?v=Lycgs02nx9E)
+https://www.youtube.com/watch?v=Lycgs02nx9E
 
 # Instalação
 
